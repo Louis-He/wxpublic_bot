@@ -180,6 +180,9 @@ scheduler.start()    #这里的调度任务是独立的一个线程
 @robot.handler
 def hello(msg):
     ts = '['+time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(msg.time-4*60*60))+']'
+    f = open('/root/wechatbot/message.txt', 'w+')
+    f.write(ts + '\t' + msg.source + ':\t' + msg.content)
+    f.close()
     print(ts + msg.source+' --> '+msg.content)
 
     if msg.content == '天气' or msg.content == '气温' or msg.content == '气象':
@@ -218,7 +221,8 @@ def hello(msg):
             return reply + '[auto-reply]'
         except:
             return '[ERR199:未知错误]抱歉，出现了未知错误'
-    return ''
+    else:
+        return '1、输入天气：查询多伦多天气\n2、输入叮咚求导（语法例如:叮咚求导2*x^2）返回导数\n3、输入叮咚RREF（语法例如:叮咚rref1,2;3,4）返回RREF\n4、输入叮咚（语法例如：叮咚你好）进行机器人智能回复'
 
 # 让服务器监听在 0.0.0.0:80
 robot.config['HOST'] = '0.0.0.0'
