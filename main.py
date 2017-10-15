@@ -7,7 +7,7 @@ robot = werobot.WeRoBot(token='louishe999617')
 @robot.handler
 def hello(message):
     time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message.time))
-    print(message.source+' --> '+message.text)
+    print(message.source+' --> '+message.content)
     return 'Hello World!'
 
 # 让服务器监听在 0.0.0.0:80
