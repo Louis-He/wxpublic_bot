@@ -8,7 +8,7 @@ robot = werobot.WeRoBot(token='louishe999617')
 @robot.handler
 def hello(message):
     ts = '['+time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(message.time))+']'
-    print(message.source+' --> '+message.content)
+    print(ts + message.source+' --> '+message.content)
     return 'Hello World!'
 
 '''
