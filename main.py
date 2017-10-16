@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+from calcontent import *
 import werobot
 import time
 import urllib
 import json
 import requests
+import os
 from sympy import *
 from apscheduler.schedulers.background import BackgroundScheduler
 
+caltxt = '/root/wechatbot/cal/'
 robot = werobot.WeRoBot(token='louishe999617')
 client = robot.client
 
@@ -117,6 +120,7 @@ def analyze(source, JSON):
 
     return result
 
+#得到多伦多天气
 def getweather():
     source = 'EC'
     iodata = getData(source, -79.399, 43.663)
@@ -124,6 +128,7 @@ def getweather():
     print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']发送天气信息完成')
     return result
 
+#得到智能自动回复
 def turingreply(msg,usr):
     data = {'key': '1f87c3c9cf3b4867b412267f8c7c1d30',
             'info': msg,
@@ -133,6 +138,7 @@ def turingreply(msg,usr):
     result = json.loads(r.text)
     return result['text']
 
+#计算导数
 def msgdiff(msg):
     msg = msg.replace('／', '/');
     msg = msg.replace('？', '?');
@@ -143,6 +149,7 @@ def msgdiff(msg):
     s = msg
     return(str(diff(s, x)) + '\n- 叮咚云计算v1')
 
+#计算RREF
 def msgrref(msg):
     msg = msg.replace('／', '/');
     msg = msg.replace('？', '?');
@@ -190,6 +197,7 @@ def msgrref(msg):
     result += '\n- 叮咚云计算v1'
     return result
 
+#获得每日一句
 def getdaymsg():
     global daily
     timenow = time.strftime("%Y-%m-%d", time.localtime())
@@ -216,14 +224,45 @@ scheduler.add_job(clearlog, 'interval', seconds = 3600 * 6)#间隔6小时执行�
 scheduler.start()    #这里的调度任务是独立的一个线程
 '''
 
+#获得微信订阅号的access_token
 def gettoken():
     client.grant_token()
     timenow = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']access_token获取成功')
     return timenow
 
-daily = ''
+#'seq, item, day, time, address'
+#检查指定openID是否存在日历txt文件
+def existcal(openID):
+    global caltxt
 
+    isexist = os.path.isfile(caltxt + openID + '.txt')
+    if isexist:
+        return True
+    else:
+        f = open('/root/wechatbot/cal/' + openID + '.txt', 'w+')
+        f.write('seq\titem\tday\ttime\taddress\n')
+        f.close()
+        return False
+
+#返回指定openID的日历存档
+#developping
+def getcal(openID):
+    global caltxt
+
+    isexist = existcal(openID)
+    if isexist:
+        f = open(caltxt + openID + '.txt')  # 返回一个文件对象
+        line = f.readline()  # 调用文件的 readline()方法
+        while line:
+            print (line)
+            line = f.readline()
+        f.close()
+
+#修订指定openID的日历
+#def editcal(openID):
+
+daily = ''
 
 #gettoken()
 daily = getdaymsg() #初始化每日一句
