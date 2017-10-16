@@ -8,8 +8,6 @@ from sympy import *
 from apscheduler.schedulers.background import BackgroundScheduler
 
 robot = werobot.WeRoBot(token='louishe999617')
-robot.config["APP_ID"] = "wxb370c3f9373e6ec1"
-robot.config["APP_SECRET"] = "f5e7ca849a9bbf12502aea0fcb744653"
 client = robot.client
 
 def getData(org,lon,lat):
@@ -227,10 +225,10 @@ def gettoken():
 daily = ''
 
 
-gettoken()
+#gettoken()
 daily = getdaymsg() #初始化每日一句
 scheduler = BackgroundScheduler()
-scheduler.add_job(gettoken, 'interval', seconds=2 * 60 * 60)  # 间隔2小时执行一次
+#scheduler.add_job(gettoken, 'interval', seconds=2 * 60 * 60)  # 间隔2小时执行一次
 scheduler.add_job(getdaymsg, 'interval', seconds=24 * 60 * 60)  # 间隔24小时执行一次
 scheduler.start()  # 这里的调度任务是独立的一个线程
 
