@@ -5,7 +5,7 @@ import urllib
 import json
 import requests
 from sympy import *
-#from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 robot = werobot.WeRoBot(token='louishe999617')
 
@@ -202,6 +202,15 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(clearlog, 'interval', seconds = 3600 * 6)#间隔6小时执行一次
 scheduler.start()    #这里的调度任务是独立的一个线程
 '''
+
+def gettime():
+    timenow = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']发送天气信息完成')
+    return timenow
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(gettime, 'interval', seconds = 1)#间隔6小时执行一次
+scheduler.start()    #这里的调度任务是独立的一个线程
 
 @robot.handler
 def hello(msg):
