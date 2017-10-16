@@ -202,6 +202,7 @@ def getdaymsg():
     note = data["content"]
     chinese = data["note"]
     daily = getdaymsg()
+    print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']每日一句获取成功')
     return timenow+'每日一句：\n'+note+'\n'+chinese
 
 '''
@@ -226,10 +227,6 @@ def gettoken():
 
 gettoken()
 daily = getdaymsg() #初始化每日一句
-scheduler = BackgroundScheduler()
-scheduler.add_job(gettoken, 'interval', seconds = 2 * 60 * 60)#间隔2小时执行一次
-scheduler.add_job(getdaymsg, 'interval', seconds = 24 * 60 * 60)#间隔24小时执行一次
-scheduler.start()    #这里的调度任务是独立的一个线程
 
 client.create_menu({
     "button":[{
@@ -291,6 +288,11 @@ def hello(msg):
     else:
         return '欢迎关注小白叮咚～欢迎和我互动哦\n1、输入叮咚求导（语法例如:叮咚求导2*x^2）返回导数\n2、输入叮咚RREF（语法例如:叮咚rref1,2;3,4）返回RREF\n' \
                '3、输入叮咚（语法例如：叮咚你好）进行机器人智能回复\n4、输入天气：查询加拿大多伦多天气[测试板块]\n'+daily
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(gettoken, 'interval', seconds=2 * 60 * 60)  # 间隔2小时执行一次
+scheduler.add_job(getdaymsg, 'interval', seconds=24 * 60 * 60)  # 间隔24小时执行一次
+scheduler.start()  # 这里的调度任务是独立的一个线程
 
 # 让服务器监听在 0.0.0.0:80
 robot.config['HOST'] = '0.0.0.0'
