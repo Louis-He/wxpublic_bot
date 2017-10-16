@@ -32,6 +32,7 @@ def getData(org,lon,lat):
         day1dayweather.append(int(data[i]['detail'][0]['day']['weather']['img']))
         day2dayweather.append(int(data[i]['detail'][1]['day']['weather']['img']))
     '''
+    print(data)
     return data
 
 def analyze(source, JSON):
@@ -39,6 +40,7 @@ def analyze(source, JSON):
     T = []
     HI = []
     LOW = []
+    IC = []
     DATE = []
 
     seq = []
@@ -53,10 +55,34 @@ def analyze(source, JSON):
         t = daily[i]['timestamp']
         daymax = daily[i]['tempMax']
         daymin = daily[i]['tempMin']
+        icon = daily[i]['icon']
 
         T.append(t/100000.0)
         HI.append(daymax)
         LOW.append(daymin)
+        if icon == 1:
+            icon = 'Sunny'
+        elif icon == 2:
+            icon = 'Cloudy'
+        elif icon == 3:
+            icon = 'Overcast'
+        elif icon == 4:
+            icon = 'Drizzle'
+        elif icon == 5:
+            icon = 'Moderate Rain'
+        elif icon == 6:
+            icon = 'Heavy Rain'
+        elif icon == 7:
+            icon = 'Shower'
+        elif icon == 9:
+            icon = 'Snow'
+        elif icon == 10:
+            icon = 'Heavy Snow'
+
+
+
+
+        IC.append(icon)
         DATE.append(i)
         seq.append(n)
         n += 1
@@ -86,7 +112,7 @@ def analyze(source, JSON):
         n += 1
 
     for i in range(0, len(DATE)):
-        result += (DATE[seq[i]] + '\nHI:' + str(round(HI[seq[i]] - 273.15, 1)) + '°C, LOW:' + str(round(LOW[seq[i]] - 273.15, 1)) + '°C\n')
+        result += (DATE[seq[i]] + '\n' + str(IC[seq[i]]) + ', HI:' + str(round(HI[seq[i]] - 273.15, 1)) + '°C, LOW:' + str(round(LOW[seq[i]] - 273.15, 1)) + '°C' + '\n')
 
     return result
 
