@@ -232,17 +232,6 @@ scheduler = BackgroundScheduler()
 scheduler.add_job(getdaymsg, 'interval', seconds=24 * 60 * 60)  # 间隔24小时执行一次
 scheduler.start()  # 这里的调度任务是独立的一个线程
 
-client.create_menu({
-    "button":[{
-         "type": "click",
-         "name": "每日一句",
-         "key": "daily"
-    }]
-})
-@robot.key_click("daily")
-def daily(message):
-    return daily
-
 @robot.handler
 def hello(msg):
     ts = '['+time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(msg.time-4*60*60))+']'
