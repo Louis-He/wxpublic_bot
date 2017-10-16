@@ -204,12 +204,14 @@ scheduler.start()    #这里的调度任务是独立的一个线程
 '''
 
 def gettime():
+    robot.client.grant_token()
     timenow = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']发送天气信息完成')
+    print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']access_token获取成功')
     return timenow
 
+gettime()
 scheduler = BackgroundScheduler()
-scheduler.add_job(gettime, 'interval', seconds = 1)#间隔6小时执行一次
+scheduler.add_job(gettime, 'interval', seconds = 2 * 60 * 60)#间隔2小时执行一次
 scheduler.start()    #这里的调度任务是独立的一个线程
 
 @robot.handler
