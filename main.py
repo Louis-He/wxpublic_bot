@@ -208,6 +208,7 @@ def getdaymsg():
     note = data["content"]
     chinese = data["note"]
     print('[' + time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) + ']每日一句获取成功')
+    daily = timenow+'每日一句：\n'+note+'\n'+chinese
     return timenow+'每日一句：\n'+note+'\n'+chinese
 
 '''
@@ -236,12 +237,12 @@ def gettoken():
 def existcal(openID):
     global caltxt
 
-    isexist = os.path.isfile(caltxt + openID + '.txt')
+    isexist = os.path.isfile(caltxt + str(openID) + '.csv')
     if isexist:
         return True
     else:
-        f = open('/root/wechatbot/cal/' + openID + '.txt', 'w+')
-        f.write('seq\titem\tday\ttime\taddress\n')
+        f = open('/root/wechatbot/cal/' + str(openID) + '.csv', 'w+')
+        f.write('seq,item,time,place\n')
         f.close()
         return False
 
@@ -249,19 +250,33 @@ def existcal(openID):
 #developping
 def getcal(openID):
     global caltxt
-
+    '''
     isexist = existcal(openID)
     if isexist:
-        f = open(caltxt + openID + '.txt')  # 返回一个文件对象
+        f = open(caltxt + str(openID) + '.csv')  # 返回一个文件对象
+        calfile = ''
         line = f.readline()  # 调用文件的 readline()方法
         while line:
-            print (line)
+            calfile += line
             line = f.readline()
         f.close()
+    '''
+    #test purpose
+    f = open('/Users/siweihe/Desktop/stations.csv')  # 返回一个文件对象
+    calfile = ''
+    line = f.readline()  # 调用文件的 readline()方法
+    while line:
+        calfile += line
+        line = f.readline()
+    f.close()
+    personalcal = cal(calfile, openID)
+    print(personalcal)
+
+getcal(999)
 
 #修订指定openID的日历
 #def editcal(openID):
-
+'''
 daily = ''
 
 #gettoken()
@@ -325,3 +340,4 @@ def hello(msg):
 robot.config['HOST'] = '0.0.0.0'
 robot.config['PORT'] = 80
 robot.run()
+'''
